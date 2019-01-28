@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,12 +69,17 @@ public class AppsLauncherFragment extends Fragment {
 
         private ResolveInfo mResolveInfo;
         private TextView mNameTextView;
+        private ImageView mIcon;
+
 
         public ActivityHolder(View itemView) {
 
             super(itemView);
-            mNameTextView = (TextView) itemView;
-            mNameTextView.setOnClickListener(this);
+            //mNameTextView = (TextView) itemView;
+            mNameTextView = itemView.findViewById(R.id.nameTextView);
+            mIcon = itemView.findViewById(R.id.app_icon);
+            itemView.setOnClickListener(this);
+
 
 
         }
@@ -85,6 +91,7 @@ public class AppsLauncherFragment extends Fragment {
 
             String appName = mResolveInfo.loadLabel(pm).toString();
             mNameTextView.setText(appName);
+            mIcon.setImageDrawable(mResolveInfo.loadIcon(pm));
         }
 
         @Override
@@ -113,7 +120,7 @@ public class AppsLauncherFragment extends Fragment {
         public ActivityHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater
-                    .inflate(android.R.layout.simple_list_item_1, parent, false);
+                    .inflate(R.layout.apps_items, parent, false);
             return new ActivityHolder(view);
         }
 
