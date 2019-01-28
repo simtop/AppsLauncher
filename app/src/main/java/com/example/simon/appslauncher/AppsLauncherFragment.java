@@ -1,6 +1,7 @@
 package com.example.simon.appslauncher;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -62,7 +63,8 @@ public class AppsLauncherFragment extends Fragment {
         mRecyclerView.setAdapter(new ActivityAdapter(activities));
     }
 
-    private class ActivityHolder extends RecyclerView.ViewHolder {
+    private class ActivityHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private ResolveInfo mResolveInfo;
         private TextView mNameTextView;
@@ -71,6 +73,8 @@ public class AppsLauncherFragment extends Fragment {
 
             super(itemView);
             mNameTextView = (TextView) itemView;
+            mNameTextView.setOnClickListener(this);
+
 
         }
 
@@ -82,6 +86,19 @@ public class AppsLauncherFragment extends Fragment {
             String appName = mResolveInfo.loadLabel(pm).toString();
             mNameTextView.setText(appName);
         }
+
+        @Override
+        public void onClick(View v) {
+            ActivityInfo activityInfo = mResolveInfo.activityInfo;
+            Intent i = new Intent(Intent.ACTION_MAIN)
+
+                    .setClassName(activityInfo.applicationInfo.packageName,
+                            activityInfo.name)
+                    //addFlags part makes that the intent starts new task separate from the app
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+        }
+
 
     }
 
